@@ -21,7 +21,7 @@ public class UserController {
 
     // GET ALL USERS
     @GetMapping("/user")
-    public List<User> getAllNotes() {
+    public List<User> getAllUser() {
         return userRepository.findAll();
     }
 
@@ -42,7 +42,7 @@ public class UserController {
     // UPDATE USER
     @PutMapping("/update/user/{id}")
     public User UpdateUser(@PathVariable(value = "id") Long id, @Validated @RequestBody User userDetails){
-        User note = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Note", "id",id));
+        User note = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id",id));
         note.setName(userDetails.getName());
         note.setEmail(userDetails.getEmail());
         note.setLevel(userDetails.getLevel());
@@ -54,7 +54,7 @@ public class UserController {
     // DELETE USER
     @DeleteMapping("/user/{id}")
     public ResponseEntity<?> DeleteUser(@PathVariable(value = "id") Long Id) {
-        User user = userRepository.findById(Id).orElseThrow(() -> new ResourceNotFoundException("Note", "id",Id));
+        User user = userRepository.findById(Id).orElseThrow(() -> new ResourceNotFoundException("User", "id",Id));
         userRepository.delete(user);
         return ResponseEntity.ok().build();
 

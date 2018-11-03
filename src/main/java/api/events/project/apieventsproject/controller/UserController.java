@@ -3,6 +3,8 @@ package api.events.project.apieventsproject.controller;
 import api.events.project.apieventsproject.Exception.ResourceNotFoundException;
 import api.events.project.apieventsproject.entity.User;
 import api.events.project.apieventsproject.repository.UserRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,26 +15,29 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api")
+@Api(value = "/api",description = "User ")
 public class UserController {
 
     @Autowired
     UserRepository userRepository;
 
-    // GET ALL USERS
+
+    @ApiOperation(value = "GET ALL USERS")
     @GetMapping("/user")
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
 
-    //Create New User
+
+    @ApiOperation(value = "CREATE USER")
     @PostMapping("/user/create")
     public User createNote(@Valid @RequestBody User user){
 
         return userRepository.save(user);
     }
 
-    // GET SINGLE USER
+
+    @ApiOperation(value = "GET SINGLE USER")
     @GetMapping("/user/{id}")
     public User getUserById(@PathVariable(value = "id") Long user) {
         return userRepository.findById(user)
@@ -40,6 +45,7 @@ public class UserController {
     }
 
     // UPDATE USER
+    @ApiOperation(value = "UPDATE USER")
     @PutMapping("/update/user/{id}")
     public User UpdateUser(@PathVariable(value = "id") Long id, @Validated @RequestBody User userDetails){
         User note = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id",id));
@@ -51,7 +57,7 @@ public class UserController {
         return updatedNote;
     }
 
-    // DELETE USER
+    @ApiOperation(value = "DELETE USER")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<?> DeleteUser(@PathVariable(value = "id") Long Id) {
         User user = userRepository.findById(Id).orElseThrow(() -> new ResourceNotFoundException("User", "id",Id));

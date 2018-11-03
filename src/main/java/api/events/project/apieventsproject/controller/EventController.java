@@ -3,6 +3,8 @@ package api.events.project.apieventsproject.controller;
 import api.events.project.apieventsproject.Exception.ResourceNotFoundException;
 import api.events.project.apieventsproject.entity.Event;
 import api.events.project.apieventsproject.repository.EventRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,33 +13,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@Api(value = "/api",description = "EVENTS")
 public class EventController {
     @Autowired
     EventRepository eventRepository;
 
-    // GET ALL Events
+
+    @ApiOperation(value="GET ALL EVENTS")
     @GetMapping("/event")
     public List<Event> getAllNotes() {
         return eventRepository.findAll();
     }
 
-    // Create EVENTS
+
+    @ApiOperation(value = "CREATE EVENTS")
     @PostMapping("/event/create")
     public Event create(@Validated @RequestBody Event event) {
         return eventRepository.save(event);
 
     }
 
-    // GET SINGLE EVENT
+
+    @ApiOperation(value="GET SINGLE EVENT")
     @GetMapping("/event/{id}")
     public Event getEventById(@PathVariable(value = "id") Long event) {
         return eventRepository.findById(event)
                 .orElseThrow(() -> new ResourceNotFoundException("Note", "id", event));
     }
 
-    // UPDATE EVENT
-    @PutMapping("/event/edit/{id}")
+    @ApiOperation(value="EDIT EVENT")
+    @PutMapping("/event/{id}")
     public Event UpdatedEvent(@PathVariable(value = "id") Long event, Event eventDetails) {
         Event update = eventRepository.findById(event).orElseThrow(() -> new ResourceNotFoundException("Event:", "id", event));
         update.setName(eventDetails.getName());
@@ -56,7 +61,7 @@ public class EventController {
         return updated_At;
 
     }
-    // DELETE EVENT
+    @ApiOperation(value = "DELETE EVENT")
     @DeleteMapping("/event/{id}")
     public ResponseEntity<?> DeleteEvent(@PathVariable(value = "id") Long id){
         Event delete = eventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event:", "id",id));

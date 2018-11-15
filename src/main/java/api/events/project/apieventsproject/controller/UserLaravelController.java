@@ -1,8 +1,8 @@
 package api.events.project.apieventsproject.controller;
 
 import api.events.project.apieventsproject.Exception.ResourceNotFoundException;
-import api.events.project.apieventsproject.entity.User;
-import api.events.project.apieventsproject.repository.UserRepository;
+import api.events.project.apieventsproject.entity.UserLaravel;
+import api.events.project.apieventsproject.repository.UserLaravelRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,52 +16,53 @@ import java.util.List;
 
 @RestController
 @Api(value = "/api",description = "User ")
-public class UserController {
+@RequestMapping("/api")
+public class UserLaravelController {
 
     @Autowired
-    UserRepository userRepository;
+    UserLaravelRepository userLaravelRepository;
 
 
     @ApiOperation(value = "GET ALL USERS")
     @GetMapping("/user")
-    public List<User> getAllUser() {
-        return userRepository.findAll();
+    public List<UserLaravel> getAllUser() {
+        return  userLaravelRepository.findAll();
     }
 
 
     @ApiOperation(value = "CREATE USER")
-    @PostMapping("/user/create")
-    public User createNote(@Valid @RequestBody User user){
+    @PostMapping("/user")
+    public UserLaravel createNote(@Valid @RequestBody UserLaravel user){
 
-        return userRepository.save(user);
+        return  userLaravelRepository.save(user);
     }
 
 
     @ApiOperation(value = "GET SINGLE USER")
     @GetMapping("/user/{id}")
-    public User getUserById(@PathVariable(value = "id") Long user) {
-        return userRepository.findById(user)
+    public UserLaravel getUserById(@PathVariable(value = "id") Long user) {
+        return  userLaravelRepository.findById(user)
                 .orElseThrow(() -> new ResourceNotFoundException("Note", "id", user));
     }
 
     // UPDATE USER
     @ApiOperation(value = "UPDATE USER")
-    @PutMapping("/update/user/{id}")
-    public User UpdateUser(@PathVariable(value = "id") Long id, @Validated @RequestBody User userDetails){
-        User note = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id",id));
+    @PutMapping("/user/{id}")
+    public UserLaravel UpdateUser(@PathVariable(value = "id") Long id, @Validated @RequestBody UserLaravel userDetails){
+        UserLaravel note =  userLaravelRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id",id));
         note.setName(userDetails.getName());
         note.setEmail(userDetails.getEmail());
         note.setLevel(userDetails.getLevel());
         note.setPassword(userDetails.getPassword());
-        User updatedNote = userRepository.save(note);
+        UserLaravel updatedNote =  userLaravelRepository.save(note);
         return updatedNote;
     }
 
     @ApiOperation(value = "DELETE USER")
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> DeleteUser(@PathVariable(value = "id") Long Id) {
-        User user = userRepository.findById(Id).orElseThrow(() -> new ResourceNotFoundException("User", "id",Id));
-        userRepository.delete(user);
+    public ResponseEntity<?> DeleteUser(@PathVariable(value = "id") Long id) {
+        UserLaravel user =  userLaravelRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id",id));
+        userLaravelRepository.delete(user);
         return ResponseEntity.ok().build();
 
     }

@@ -1,50 +1,75 @@
 package api.events.project.apieventsproject.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.Date;
+import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name="users")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
-public class User implements Serializable{
-
-    @Id
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+            "username"
+        }),
+        @UniqueConstraint(columnNames = {
+            "email"
+        })
+})
+public class User {
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @NotBlank
-    private  String name;
-    @NotBlank
-    private  String email;
-    @NotBlank
-    private  String password;
-    @NotNull
-    private  int level;
+    @Size(min=3, max = 50)
+    private String name;
 
-    @Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdAt;
+    @NotBlank
+    @Size(min=3, max = 50)
+    private String username;
 
-    @Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
-    private Date updatedAt;
+    @NaturalId
+    @NotBlank
+    @Size(max = 50)
+    @Email
+    private String email;
+
+    @NotBlank
+    @Size(min=6, max = 100)
+    private String password;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", 
+    	joinColumns = @JoinColumn(name = "user_id"), 
+    	inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    public User() {}
+
+    public User(String name, String username, String email, String password) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        this.Id = Id;
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getName() {
@@ -71,30 +96,11 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public int getLevel() {
-        return level;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
 }
-
-

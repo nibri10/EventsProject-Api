@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -27,19 +26,19 @@ public class Event implements Serializable {
     @NotBlank
     private String description;
 
-    @NotBlank
-    private Date date_inital;
 
-    @NotBlank
+    private Date date_initial;
+
+
     private Date date_finish;
 
     @NotBlank
     private String local;
 
-    @NotBlank
+
     private String time_initial;
 
-    @NotBlank
+
     private  String time_expiration;
 
     @NotBlank
@@ -88,12 +87,12 @@ public class Event implements Serializable {
         this.description = description;
     }
 
-    public Date getDate_inital() {
-        return date_inital;
+    public Date getDate_initial() {
+        return date_initial;
     }
 
-    public void setDate_inital(Date date_inital) {
-        this.date_inital = date_inital;
+    public void setDate_initial(Date date_initial) {
+        this.date_initial= date_initial;
     }
 
     public Date getDate_finish() {

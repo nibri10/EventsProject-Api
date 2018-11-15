@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @Api(value = "/api",description = "EVENTS")
+@RequestMapping("/api")
 public class EventController {
     @Autowired
     EventRepository eventRepository;
@@ -27,7 +28,7 @@ public class EventController {
 
 
     @ApiOperation(value = "CREATE EVENTS")
-    @PostMapping("/event/create")
+    @PostMapping("/event")
     public Event create(@Validated @RequestBody Event event) {
         return eventRepository.save(event);
 
@@ -47,7 +48,7 @@ public class EventController {
         Event update = eventRepository.findById(event).orElseThrow(() -> new ResourceNotFoundException("Event:", "id", event));
         update.setName(eventDetails.getName());
         update.setDescription(eventDetails.getDescription());
-        update.setDate_inital(eventDetails.getDate_inital());
+        update.setDate_initial(eventDetails.getDate_initial());
         update.setDate_finish(eventDetails.getDate_finish());
         update.setLocal(eventDetails.getLocal());
         update.setTime_initial(eventDetails.getTime_initial());

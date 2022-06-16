@@ -19,7 +19,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     public Docket greetingApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("api.events.project.apieventsproject"))
+                .apis(RequestHandlerSelectors.any())
                 .build()
                 .apiInfo(metaData());
 

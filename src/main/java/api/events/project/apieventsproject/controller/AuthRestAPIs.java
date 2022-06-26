@@ -2,6 +2,7 @@ package api.events.project.apieventsproject.controller;
 import api.events.project.apieventsproject.entity.Role;
 import api.events.project.apieventsproject.entity.RoleName;
 import api.events.project.apieventsproject.entity.User;
+import api.events.project.apieventsproject.message.request.JsonResponseCreate;
 import api.events.project.apieventsproject.message.request.LoginForm;
 import api.events.project.apieventsproject.message.request.SignUpForm;
 import api.events.project.apieventsproject.message.response.JwtResponse;
@@ -59,15 +60,13 @@ public class AuthRestAPIs {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
+    public ResponseEntity<JsonResponseCreate> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<String>("Fail -> Username is already taken!",
-                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new JsonResponseCreate(true,"Fail -> Username is already taken!","error"),HttpStatus.BAD_REQUEST);
         }
 
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<String>("Fail -> Email is already in use!",
-                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new JsonResponseCreate(true,"Fail -> Email is already in use!","error"),HttpStatus.BAD_REQUEST);
         }
 
         // Creating user's account
@@ -75,7 +74,7 @@ public class AuthRestAPIs {
                 signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
 
         userRepository.save(user);
+        return new ResponseEntity<>(new JsonResponseCreate(true,"User registered successfully!","OK"), HttpStatus.OK);
 
-        return ResponseEntity.ok().body("User registered successfully!");
     }
 }
